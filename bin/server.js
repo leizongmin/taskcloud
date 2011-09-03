@@ -56,6 +56,11 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 					ret.status = 1;
 					taskvm.kill(id);
 					break;
+				/* 运行一次任务 */
+				case 'once':
+					var id = parseInt(req.qs.id);
+					ret.status = taskvm.once(id) ? 1 : 0;
+					break;
 				/* 其他 */
 				default:
 					ret.status = -1;

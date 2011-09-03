@@ -120,7 +120,7 @@ var renderTaskList = function (list) {
 				'<span class="task-id">' + t.task_id + '</span> <span class="task-template">' + t.template + '</span> ' +
 				'<span class="task-cycle">' + t.cycle + '</span> start:<span class="task-attribute">' + t.auto_start + '</span> end:' +
 				'<span class="task-attribute">' + t.auto_end + '</span> <span class="task-attribute">' + t.status + '</span> ' +
-				'<span class="task-attribute">' + t.timestamp + '</span></div>';
+				'<span class="task-attribute">' + t.timestamp + '</span> <a href="#" onclick="once(' + t.task_id + ')">[Run]</a></div>';
 	}
 	return html;
 }
@@ -139,6 +139,15 @@ var kill = function (id) {
 	$.getJSON('/task/kill?id=' + id, function (d) {
 		if (d.status < 1)
 			alert('删除任务' + id + '失败！');
+		else
+			refresh();
+	});
+}
+/** 立即运行一次 */
+var once = function (id) {
+	$.getJSON('/task/once?id=' + id, function (d) {
+		if (d.status < 1)
+			alert('运行任务' + id + '失败！');
 		else
 			refresh();
 	});
