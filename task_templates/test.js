@@ -1,7 +1,5 @@
+//var arguments = task.get('arguments');
+for (i in args)
+	debug(i + '=' + args[i]);
 
-var msg = task.get('msg');
-if (!msg)
-	msg = 'Hello, world!';
-debug(msg);
-//debug('Hello, world!');
 task.end();

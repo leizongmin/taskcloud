@@ -16,12 +16,13 @@
 debug('检查签到情况...');
 
 // 获取参数
-var access_token = task.get('access_token');
-var access_token_secret = task.get('access_token_secret');
-var lat = task.get('lat');
-var lng = task.get('lng');
-var radius = task.get('radius');
-var topic = task.get('topic');
+var args = task.get('arguments');
+var access_token = args.access_token;
+var access_token_secret = args.access_token_secret;
+var lat = args.lat;
+var lng = args.lng;
+var radius = args.radius;
+var topic = args.topic;
 
 var url = 'http://isign.sinaapp.com/service/geotopic.php';
 
