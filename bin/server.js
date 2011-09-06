@@ -39,6 +39,17 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 	console.log('server_port=' + server_port);
 	console.log('time_zone=' + time_zone);
 	
+	//--------------------------初始化日志记录---------------------------------------------
+	var debug = logger = function (msg) {
+		var date = new Date();
+		date.setTime(date.getTime() + 3600000 * time_zone);		// 设置时区
+		var str_time = date.getUTCFullYear() + '/' + (date.getUTCMonth() + 1) + '/' + date.getUTCDate() + ' ' + 
+						date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+		var msg = '[' + str_time + '] ' + msg;
+		console.log(msg);
+	}
+	taskvm.logger = logger;
+	
 	//--------------------------初始化Web.js--------------------------------------------
 	// 基本管理命令
 	var getRouter = {
@@ -86,24 +97,17 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 		}
 	}
 	var urlRouter = {
-		'/':	'bin/web/index.html',	// 默认首页
-		'(.*)':	'bin/web/$1'			// 设置网站基本目录为 bin/web
+		'(.*)':		'bin/web/$1',			// 设置网站基本目录为 bin/web
+		'/':		'bin/web/index.html'	// 默认首页
 	}
 	web.run(urlRouter, server_port);
 	web.get(getRouter);
 	web.post(postRouter);
 	web.set404('./web/404.html');
+	
+	//--------------------------初始化管理插件---------------------------------------------
+	require('./path.template')(web, template_dir, logger);
 
-	//--------------------------初始化日志记录---------------------------------------------
-	var debug = logger = function (msg) {
-		var date = new Date();
-		date.setTime(date.getTime() + 3600000 * time_zone);		// 设置时区
-		var str_time = date.getUTCFullYear() + '/' + (date.getUTCMonth() + 1) + '/' + date.getUTCDate() + ' ' + 
-						date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
-		var msg = '[' + str_time + '] ' + msg;
-		console.log(msg);
-	}
-	taskvm.logger = logger;
 
 	//--------------------------初始化taskvm--------------------------------------------
 	taskvm.init(template_dir, queue_cycle);

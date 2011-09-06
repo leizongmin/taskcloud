@@ -44,6 +44,12 @@
 	font-weight: bold;
 	padding-right: 4px;
 }
+.template-item a{
+	color: #004880;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 4px;
+}
 </style>
 </head>
 <body>
@@ -56,21 +62,15 @@
 <!-- 任务进程 -->
 <div class="pannel process">
 	<button onclick="refresh()">刷新</button>
-	<div class="task-process">
-	<!--
-		<div class="task-item">
-			<span class="task-template">WatchWeiboGeo</span>@<span class="task-id">22</span>/<span class="task-cycle">3600000</span>
-		</div>
-		<div class="task-item">
-			<span class="task-template">WatchWeiboGeo</span>@<span class="task-id">22</span>/<span class="task-cycle">3600000</span>
-		</div>
-		<div class="task-item">
-			<span class="task-template">WatchWeiboGeo</span>@<span class="task-id">22</span>/<span class="task-cycle">3600000</span>
-		</div>
-	-->
-	</div>
+	<div class="task-process"></div>
 </div>
 <div style="clear:both;"></div>
+
+<!-- 模版文件列表 -->
+<div class="pannel template">
+	<h2>模板文件列表</h2>
+	<div class="template-item"></div>
+</div>
 
 <!-- 日志 -->
 <div class="pannel">
@@ -78,10 +78,12 @@
 </div>
 </body>
 <script>
+var USER = 'test';
+
 /** 运行命令 */
 var exec = function () {
 	var code = $('#cmdcode').val();
-	$.post('/task/exec', {code: code, user: 'test'}, function (d) {
+	$.post('/task/exec', {code: code, user: USER}, function (d) {
 		if (d.status > 0)
 			refresh();
 		alert(d.status > 0 ? '成功！' : '失败！');
@@ -120,7 +122,8 @@ var renderTaskList = function (list) {
 				'<span class="task-id">' + t.task_id + '</span> <span class="task-template">' + t.template + '</span> ' +
 				'<span class="task-cycle">' + t.cycle + '</span> start:<span class="task-attribute">' + t.auto_start + '</span> end:' +
 				'<span class="task-attribute">' + t.auto_end + '</span> <span class="task-attribute">' + t.status + '</span> ' +
-				'<span class="task-attribute">' + t.timestamp + '</span> <a href="#" onclick="once(' + t.task_id + ')">[Run]</a></div>';
+				'<span class="task-attribute">' + t.timestamp + '</span> <a href="#" onclick="once(' + t.task_id + ')">[Run]</a> ' +
+				'<a href="/editor.html#' + t.template + '" target="_blank">[Edit]</a></div>';
 	}
 	return html;
 }
@@ -153,8 +156,25 @@ var once = function (id) {
 	});
 }
 
+/** 获取文件列表 */
+var getTemplateList = function () {
+	$.getJSON('/templatelist/' + USER, function (d) {
+		if (d.status < 0)
+			alert('获取模板列表失败！');
+		else {
+			var html = '';
+			for (i in d.data) {
+				var t = d.data[i];
+				html += '&nbsp;&nbsp;<span><a href="/editor.html#' + USER + '/' + t + '" target="_blank">' + t + '</a></span>&nbsp;&nbsp;';
+			}
+			$('.template-item').html(html);
+		}
+	});
+}
+
 /* 自动刷新 */
 setInterval(refresh, 5000);
 refresh();
+getTemplateList();
 </script>
 </html>
