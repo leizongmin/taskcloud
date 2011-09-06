@@ -81,7 +81,7 @@
 /** 运行命令 */
 var exec = function () {
 	var code = $('#cmdcode').val();
-	$.post('/task/exec', {code: code}, function (d) {
+	$.post('/task/exec', {code: code, user: 'test'}, function (d) {
 		if (d.status > 0)
 			refresh();
 		alert(d.status > 0 ? '成功！' : '失败！');

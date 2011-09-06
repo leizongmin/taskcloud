@@ -75,7 +75,8 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 				/* 运行命令 */
 				case 'exec':
 					var code = req.data.code;
-					ret.status = taskvm.exec(code) ? 1 : 0;
+					var user = req.data.user;
+					ret.status = taskvm.exec(code, user) ? 1 : 0;
 					break;
 				/* 其他 */
 				default:
