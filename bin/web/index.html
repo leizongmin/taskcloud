@@ -1,180 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>任务进程</title>
+<title>登录</title>
 <meta charset="utf-8" />
 <script src="http://lib.sinaapp.com/js/jquery/1.6.2/jquery.min.js"></script>
+<script src="/client.js"></script>
 <style>
-.pannel {
+#login-box {
 	box-shadow: 2px 2px 10px #B0D8FF;
-	border: 2px solid #B0D8FF;
-	padding: 8px;
-	font-size: 12px;
+	width: 220px;
+	padding: 24px;
+	margin: auto;
 }
-.command {
-	width: 300px;
-	float: left;
-}
-.process {
-	width: 640px;
-	float: right;
-}
-.task-item {
-	cursor: pointer;
-	padding: 4px 0px;
-	border-bottom: 1px solid #B0D8FF;
-}
-.task-template {
-	color: #004880;
-	font-weight: bold;
+#login-box input {
+	border: 1px solid #B0D8FF;
 	padding: 4px;
-}
-.task-id {
-	font-weight: bold;
-	color: #D03A00;
-	padding: 4px;
-}
-.task-cycle {
-	color: #049000;
-	font-weight: bold;
-	padding: 4px;
-}
-.task-attribute {
-	color: #303030;
-	font-weight: bold;
-	padding-right: 4px;
-}
-.template-item a{
-	color: #004880;
-	font-weight: bold;
-	font-size: 14px;
-	padding: 4px;
+	width: 200px;
 }
 </style>
 </head>
 <body>
-<!-- 运行命令 -->
-<div class="pannel command">
-	<textarea id="cmdcode" style="width:300px; height:200px;"></textarea>
-	<button onclick="exec()">运行</button>
+
+<div id="login-box">
+	<h2>登录</h2>
+	用户名：<br>
+	<input id="username" type="text" /><br>
+	密码：<br>
+	<input id="password" type="password" /><br>
+	(测试用户名和密码均为test)<br>
+	<button onclick="login()">登录</button>
 </div>
 
-<!-- 任务进程 -->
-<div class="pannel process">
-	<button onclick="refresh()">刷新</button>
-	<div class="task-process"></div>
-</div>
-<div style="clear:both;"></div>
-
-<!-- 模版文件列表 -->
-<div class="pannel template">
-	<h2>模板文件列表</h2>
-	<div class="template-item"></div>
-</div>
-
-<!-- 日志 -->
-<div class="pannel">
-	<h2>日志</h2>
-</div>
 </body>
 <script>
-var USER = 'test';
+taskcloud.init(function () {
+	if (taskcloud.isLogin)
+		alert(taskcloud.username + ', 你好！')
+	else
+		alert('你还没登录!');
+});
 
-/** 运行命令 */
-var exec = function () {
-	var code = $('#cmdcode').val();
-	$.post('/' + USER + '/exec', {code: code, user: USER}, function (d) {
-		if (d.status > 0)
-			refresh();
-		alert(d.status > 0 ? '成功！' : '失败！');
-	}, 'json');
-}
-
-/** 获取任务列表 */
-var refresh = function () {
-	$.getJSON('/' + USER + '/tasklist', function (d) {
-		if (d.status > 0)
-			displayTaskList(d.data);
-	});
-}
-
-/** 显示任务列表 */
-var displayTaskList = function (list) {
-	console.log(list);
-	var html = '';
-	html += '<h3>已开始自动运行任务</h3>' + renderTaskList(list.auto) + '<hr>';
-	html += '<h3>未开始自动运行任务</h3>' + renderTaskList(list.wait) + '<hr>';
-	html += '<h3>不自动运行的任务</h3>' + renderTaskList(list.sleep);
-	$('.task-process').html(html);
-}
-
-/** 渲染 */
-var renderTaskList = function (list) {
-	var html = '';
-	for (i in list) {
-		var t = list[i];
-		t.cycle = t.cycle ? t.cycle : '-';
-		t.auto_start = t.auto_start > 0 ? time2str(t.auto_start) : '-';
-		t.auto_end = t.auto_end > 0 ? time2str(t.auto_end) : '-';
-		t.timestamp = t.timestamp > 0 ? time2str(t.timestamp) : '-';
-		t.status = t.status > 0 ? 'running' : 'ready';
-		html += '<div class="task-item"><a href="#" onclick="kill(' + t.task_id + ')">[X]</a>' +
-				'<span class="task-id">' + t.task_id + '</span> <span class="task-template">' + t.template + '</span> ' +
-				'<span class="task-cycle">' + t.cycle + '</span> start:<span class="task-attribute">' + t.auto_start + '</span> end:' +
-				'<span class="task-attribute">' + t.auto_end + '</span> <span class="task-attribute">' + t.status + '</span> ' +
-				'<span class="task-attribute">' + t.timestamp + '</span> <a href="#" onclick="once(' + t.task_id + ')">[Run]</a> ' +
-				'<a href="/editor.html#' + t.template + '" target="_blank">[Edit]</a></div>';
-	}
-	return html;
-}
-
-/** 将毫秒时间转换为文本 */
-var time2str = function (time) {
-	var date = new Date(time);
-	date.setTime(date.getTime() + 3600000 * 8);		// 设置为+8时区
-	var str_time = date.getUTCFullYear() + '/' + (date.getUTCMonth() + 1) + '/' + date.getUTCDate() + ' ' + 
-					date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
-	return str_time;
-}
-
-/** 删除任务 */
-var kill = function (id) {
-	$.getJSON('/' + USER + '/kill?id=' + id, function (d) {
-		if (d.status < 1)
-			alert('删除任务' + id + '失败！');
+/** 登录 */
+var login = function () {
+	var username = $('#username').val();
+	var password = $('#password').val();
+	taskcloud.login(username, password, function () {
+		if (taskcloud.isLogin)
+			alert('登录成功！');
 		else
-			refresh();
+			alert('登录失败！');
 	});
 }
-/** 立即运行一次 */
-var once = function (id) {
-	$.getJSON('/' + USER + '/once?id=' + id, function (d) {
-		if (d.status < 1)
-			alert('运行任务' + id + '失败！');
-		else
-			refresh();
-	});
-}
-
-/** 获取文件列表 */
-var getTemplateList = function () {
-	$.getJSON('/templatelist/' + USER, function (d) {
-		if (d.status < 0)
-			alert('获取模板列表失败！');
-		else {
-			var html = '';
-			for (i in d.data) {
-				var t = d.data[i];
-				html += '&nbsp;&nbsp;<span><a href="/editor.html#' + USER + '/' + t + '" target="_blank">' + t + '</a></span>&nbsp;&nbsp;';
-			}
-			$('.template-item').html(html);
-		}
-	});
-}
-
-/* 自动刷新 */
-setInterval(refresh, 5000);
-refresh();
-//getTemplateList();
 </script>
 </html>

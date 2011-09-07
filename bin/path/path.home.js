@@ -29,7 +29,20 @@ module.exports = function (web, logger, usermanager) {
 			ret.data = usermanager.login(username, password);
 			ret.status = ret.data ? 1 : 0;
 			res.sendJSON(ret);
-		} 
+		},
+		
+		/* 获取当前用户名 */
+		'/access_token/:access_token':	function (req, res) {
+			var access_token = req.path.access_token;
+			var ret = {}
+			var username = usermanager.getUserName(access_token);
+			if (username)
+				ret.data = usermanager.users[username];
+			else
+				ret.data = false;
+			ret.status = ret.data ? 1 : 0;
+			res.sendJSON(ret);
+		}
 	}
 	
 	web.get(getRouter);
