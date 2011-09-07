@@ -51,62 +51,16 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 	taskvm.logger = logger;
 	
 	//--------------------------初始化Web.js--------------------------------------------
-	// 基本管理命令
-	var getRouter = {
-		'task/:cmd':	function (req, res) {
-			var ret = {}
-			switch (req.path.cmd) {
-				/* 获取任务列表 */
-				case 'list':
-					ret.status = 1;
-					ret.data = taskvm.list();
-					break;
-				/* 删除任务 */
-				case 'kill':
-					var id = parseInt(req.qs.id);
-					ret.status = 1;
-					taskvm.kill(id);
-					break;
-				/* 运行一次任务 */
-				case 'once':
-					var id = parseInt(req.qs.id);
-					ret.status = taskvm.once(id) ? 1 : 0;
-					break;
-				/* 其他 */
-				default:
-					ret.status = -1;
-			}
-			res.sendJSON(ret);
-		}
-	}
-	var postRouter = {
-		'task/:cmd':	function (req, res) {
-			var ret = {}
-			switch (req.path.cmd) {
-				/* 运行命令 */
-				case 'exec':
-					var code = req.data.code;
-					var user = req.data.user;
-					ret.status = taskvm.exec(code, user) ? 1 : 0;
-					break;
-				/* 其他 */
-				default:
-					ret.status = -1;
-			}
-			res.sendJSON(ret);
-		}
-	}
 	var urlRouter = {
 		'(.*)':		'bin/web/$1',			// 设置网站基本目录为 bin/web
 		'/':		'bin/web/index.html'	// 默认首页
 	}
 	web.run(urlRouter, server_port);
-	web.get(getRouter);
-	web.post(postRouter);
 	web.set404('./web/404.html');
 	
 	//--------------------------初始化管理插件---------------------------------------------
-	require('./path.template')(web, template_dir, logger);
+	require('./path.user')(web, logger, taskvm);
+	require('./path.template')(web, logger, template_dir);
 
 
 	//--------------------------初始化taskvm--------------------------------------------

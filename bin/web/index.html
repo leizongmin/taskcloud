@@ -83,7 +83,7 @@ var USER = 'test';
 /** 运行命令 */
 var exec = function () {
 	var code = $('#cmdcode').val();
-	$.post('/task/exec', {code: code, user: USER}, function (d) {
+	$.post('/' + USER + '/exec', {code: code, user: USER}, function (d) {
 		if (d.status > 0)
 			refresh();
 		alert(d.status > 0 ? '成功！' : '失败！');
@@ -92,7 +92,7 @@ var exec = function () {
 
 /** 获取任务列表 */
 var refresh = function () {
-	$.getJSON('/task/list', function (d) {
+	$.getJSON('/' + USER + '/tasklist', function (d) {
 		if (d.status > 0)
 			displayTaskList(d.data);
 	});
@@ -139,7 +139,7 @@ var time2str = function (time) {
 
 /** 删除任务 */
 var kill = function (id) {
-	$.getJSON('/task/kill?id=' + id, function (d) {
+	$.getJSON('/' + USER + '/kill?id=' + id, function (d) {
 		if (d.status < 1)
 			alert('删除任务' + id + '失败！');
 		else
@@ -148,7 +148,7 @@ var kill = function (id) {
 }
 /** 立即运行一次 */
 var once = function (id) {
-	$.getJSON('/task/once?id=' + id, function (d) {
+	$.getJSON('/' + USER + '/once?id=' + id, function (d) {
 		if (d.status < 1)
 			alert('运行任务' + id + '失败！');
 		else
@@ -175,6 +175,6 @@ var getTemplateList = function () {
 /* 自动刷新 */
 setInterval(refresh, 5000);
 refresh();
-getTemplateList();
+//getTemplateList();
 </script>
 </html>

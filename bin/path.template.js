@@ -1,9 +1,13 @@
 /**
- * taskcloud Web 文件管理
+ * taskcloud Web 用户任务模板管理
  *
  * @author leizongmin<leizongmin@gmail.com>
  * @version 0.1
  */
+ 
+/*
+ * 依赖此模块：server
+ */ 
 
 var fs = require('fs'); 
 var path = require('path');
@@ -12,17 +16,16 @@ var path = require('path');
  * 注册监听器
  *
  * @param {Web.js} web Web.js实例
- * @param {string} template_path 模板根目录
  * @param {function} logger 输出日志
+ * @param {string} template_path 模板根目录
  */
-module.exports = function (web, template_path, logger) {
+module.exports = function (web, logger, template_path) {
 	TEMPLATE_PATH = template_path ? template_path : TEMPLATE_PATH;
-	debug = logger;
-	debug('Loading manager: template');
+	logger('Loading web path: template');
 	
 	var getRouter = {
 		/* 读取用户的模板列表 */
-		'templatelist/:user':	function (req, res) {
+		'/:user/templatelist':	function (req, res) {
 			var ret = {}
 			ret.data = getTemplateList(req.path.user);
 			ret.status = ret.data ? 1 : 0;
@@ -30,26 +33,26 @@ module.exports = function (web, template_path, logger) {
 		},
 		
 		/* 读取模板文件 */
-		'template/:user/:template':	function (req, res) {
+		'/:user/template/:template':	function (req, res) {
 			var ret = {}
 			ret.data = getTemplateCode(req.path.user, req.path.template);
 			ret.status = typeof ret.data == 'string' ? 1 : 0;
 			res.sendJSON(ret);
 		}
 	}
-	web.get(getRouter);
 	
 	var postRouter = {
 		/* 修改模版文件 */
-		'template/:user/:template':	function (req, res) {
+		'/:user/template/:template':	function (req, res) {
 			var ret = {}
 			ret.data = saveTemplateCode(req.path.user, req.path.template, req.data.code);
 			ret.status = ret.data ? 1 : 0;
 			res.sendJSON(ret);
 		}
 	}
-	web.post(postRouter);
 	
+	web.get(getRouter);
+	web.post(postRouter);
 }
 
 var TEMPLATE_PATH = '.';
