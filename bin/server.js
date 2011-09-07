@@ -7,6 +7,7 @@
  
 var web = require('Web.js');
 var taskvm = require('../lib/taskvm');
+var logcache = require('../lib/logcache');
 
 var server = module.exports;
 
@@ -61,6 +62,7 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 	//--------------------------初始化管理插件---------------------------------------------
 	require('./path.user')(web, logger, taskvm);
 	require('./path.template')(web, logger, template_dir);
+	require('./path.log')(web, logger, logcache);
 
 
 	//--------------------------初始化taskvm--------------------------------------------

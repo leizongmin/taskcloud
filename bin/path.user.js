@@ -15,7 +15,6 @@
  * @param {Web.js} web Web.js实例
  * @param {function} logger 输出日志
  * @param {taskvm} taskvm taskvm实例
- * @
  */
 module.exports = function (web, logger, taskvm) {
 	logger('Loading web path: user');

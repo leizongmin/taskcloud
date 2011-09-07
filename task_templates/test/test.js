@@ -1,4 +1,4 @@
-//var arguments = task.get('arguments');
+debug('Hello');
 for (i in args)
 	debug(i + '=' + args[i]);
 
