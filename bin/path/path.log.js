@@ -15,8 +15,9 @@
  * @param {Web.js} web Web.js实例
  * @param {function} logger 输出日志
  * @param {logcache} logcache logcache实例
+ * @param {function} getUserName 通过access_token获取用户名
  */
-module.exports = function (web, logger, logcache) {
+module.exports = function (web, logger, logcache, getUserName) {
 	logger('Loading web path: log');
 	
 	var getRouter = {
@@ -25,8 +26,15 @@ module.exports = function (web, logger, logcache) {
 		'/:user/loglist':	function (req, res) {
 			var user = req.path.user;
 			var ret = {}
-			ret.data = logcache.get(user);
-			ret.status = 1;
+			// 验证权限
+			var access_token = req.qs.access_token;
+			if (user != getUserName(access_token)) {
+				ret.status = -1;
+			}
+			else {
+				ret.data = logcache.get(user);
+				ret.status = 1;
+			}
 			res.sendJSON(ret);
 		},
 		
@@ -35,8 +43,15 @@ module.exports = function (web, logger, logcache) {
 			var user = req.path.user;
 			var id = req.path.id;
 			var ret = {}
-			ret.data = logcache.get(user, id);
-			ret.status = 1;
+			// 验证权限
+			var access_token = req.qs.access_token;
+			if (user != getUserName(access_token)) {
+				ret.status = -1;
+			}
+			else {
+				ret.data = logcache.get(user, id);
+				ret.status = 1;
+			}
 			res.sendJSON(ret);
 		}
 	}

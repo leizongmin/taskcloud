@@ -8,6 +8,7 @@
 var web = require('Web.js');
 var taskvm = require('../lib/taskvm');
 var logcache = require('../lib/logcache');
+var usermanager = require('./user/usermanager');
 
 var server = module.exports;
 
@@ -57,12 +58,13 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 		'/':		'bin/web/index.html'	// 默认首页
 	}
 	web.run(urlRouter, server_port);
-	web.set404('./web/404.html');
+	//web.set404('./web/404.html');
 	
 	//--------------------------初始化管理插件---------------------------------------------
-	require('./path.user')(web, logger, taskvm);
-	require('./path.template')(web, logger, template_dir);
-	require('./path.log')(web, logger, logcache);
+	require('./path/path.user')(web, logger, taskvm, usermanager.getUserName);
+	require('./path/path.template')(web, logger, template_dir, usermanager.getUserName);
+	require('./path/path.log')(web, logger, logcache, usermanager.getUserName);
+	require('./path/path.home')(web, logger, usermanager, usermanager);
 
 
 	//--------------------------初始化taskvm--------------------------------------------

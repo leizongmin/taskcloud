@@ -18,25 +18,43 @@ var path = require('path');
  * @param {Web.js} web Web.js实例
  * @param {function} logger 输出日志
  * @param {string} template_path 模板根目录
+ * @param {function} getUserName 通过access_token获取用户名
  */
-module.exports = function (web, logger, template_path) {
+module.exports = function (web, logger, template_path, getUserName) {
 	TEMPLATE_PATH = template_path ? template_path : TEMPLATE_PATH;
 	logger('Loading web path: template');
 	
 	var getRouter = {
 		/* 读取用户的模板列表 */
 		'/:user/templatelist':	function (req, res) {
+			var user = req.path.user;
 			var ret = {}
-			ret.data = getTemplateList(req.path.user);
-			ret.status = ret.data ? 1 : 0;
+			// 验证权限
+			var access_token = req.qs.access_token;
+			if (user != getUserName(access_token)) {
+				ret.status = -1;
+			}
+			else {
+				ret.data = getTemplateList(user);
+				ret.status = ret.data ? 1 : 0;
+			}
 			res.sendJSON(ret);
 		},
 		
 		/* 读取模板文件 */
 		'/:user/template/:template':	function (req, res) {
+			var user = req.path.user;
+			var template = req.path.template;
 			var ret = {}
-			ret.data = getTemplateCode(req.path.user, req.path.template);
-			ret.status = typeof ret.data == 'string' ? 1 : 0;
+			// 验证权限
+			var access_token = req.qs.access_token;
+			if (user != getUserName(access_token)) {
+				ret.status = -1;
+			}
+			else {
+				ret.data = getTemplateCode(user, template);
+				ret.status = typeof ret.data == 'string' ? 1 : 0;
+			}
 			res.sendJSON(ret);
 		}
 	}
@@ -44,9 +62,19 @@ module.exports = function (web, logger, template_path) {
 	var postRouter = {
 		/* 修改模版文件 */
 		'/:user/template/:template':	function (req, res) {
+			var user = req.path.user;
+			var template = req.path.template;
+			var code = req.data.code;
 			var ret = {}
-			ret.data = saveTemplateCode(req.path.user, req.path.template, req.data.code);
-			ret.status = ret.data ? 1 : 0;
+			// 验证权限
+			var access_token = req.qs.access_token;
+			if (user != getUserName(access_token)) {
+				ret.status = -1;
+			}
+			else {
+				ret.data = saveTemplateCode(user, template, code);
+				ret.status = ret.data ? 1 : 0;
+			}
 			res.sendJSON(ret);
 		}
 	}
