@@ -49,7 +49,7 @@ module.exports = function (web, logger, taskvm) {
 			var code = req.qs.code;
 			var ret = {}
 			ret.data = taskvm.exec(user, code);
-			ret.status = ret.data ? 1 : 0;
+			ret.status = ret.data > 0 ? 1 : 0;
 			res.sendJSON(ret);
 		},
 		
