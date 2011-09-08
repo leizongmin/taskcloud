@@ -1,0 +1,95 @@
+.main {
+	width: 960px;
+	margin: auto;
+	margin-top: 40px;
+}
+.toolbar {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+}
+.toolbar-inner {
+	width: 960px;
+	margin: auto;
+	background-color: #FFFFF8;
+}
+.toolbar-item {
+	border: 1px solid #B0D8FF;
+	min-width: 60px;
+	padding: 8px 16px;
+	float: left;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	color: #004C98;
+}
+.toolbar-item-hover {
+	color: #FFFFFF;
+	background-color: #004C98;
+}
+.pannel {
+	box-shadow: 2px 2px 10px #B0D8FF;
+	border: 2px solid #B0D8FF;
+	padding: 8px;
+	font-size: 12px;
+}
+.command {
+	width: 306px;
+	display: none;
+	position: fixed;
+	background-color: #FFFFF8;
+}
+.task-item {
+	cursor: pointer;
+	padding: 4px 0px;
+	border-bottom: 1px solid #B0D8FF;
+}
+.task-template {
+	color: #004880;
+	font-weight: bold;
+	padding: 4px;
+}
+.task-id {
+	font-weight: bold;
+	color: #D03A00;
+	padding: 4px;
+}
+.task-cycle {
+	color: #049000;
+	font-weight: bold;
+	padding: 4px;
+}
+.task-attribute, .task-status, .task-start, .task-end, .task-timestamp {
+	color: #303030;
+	font-weight: bold;
+	padding-right: 4px;
+}
+.template-item a{
+	color: #004880;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 4px;
+}
+.process-header {
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #004C98;
+}
+.process-item {
+	font-size: 12px;
+}
+.logs {
+	width: 800px;
+	position: fixed;
+	background-color: #FFFFF8;
+	display: none;
+}
+.logs-box {
+	font-size: 12px;
+	overflow-y: scroll;
+}
+.logs-item {
+	padding: 8px;
+}

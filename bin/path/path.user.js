@@ -27,7 +27,7 @@ module.exports = function (web, logger, taskvm, getUserName) {
 			var user = req.path.user;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -44,7 +44,7 @@ module.exports = function (web, logger, taskvm, getUserName) {
 			var id = req.path.id;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -64,7 +64,7 @@ module.exports = function (web, logger, taskvm, getUserName) {
 			var code = req.qs.code;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -81,13 +81,13 @@ module.exports = function (web, logger, taskvm, getUserName) {
 			var id = req.qs.id;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
 			else {
 				ret.data = taskvm.kill(user, id);
-				ret.status = ret.data ? 1 : 0;
+				ret.status = ret.data > 0 ? 1 : 0;
 			}
 			res.sendJSON(ret);
 		},
@@ -98,7 +98,7 @@ module.exports = function (web, logger, taskvm, getUserName) {
 			var id = req.qs.id;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -118,13 +118,13 @@ module.exports = function (web, logger, taskvm, getUserName) {
 			var code = req.data.code;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.data.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
 			else {
 				ret.data = taskvm.exec(user, code);
-				ret.status = ret.data ? 1 : 0;
+				ret.status = ret.data > 0 ? 1 : 0;
 			}
 			res.sendJSON(ret);
 		}

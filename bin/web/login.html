@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>登录</title>
+<meta charset="utf-8" />
+<style>
+#login-box {
+	box-shadow: 2px 2px 10px #B0D8FF;
+	width: 220px;
+	padding: 24px;
+	margin: auto;
+}
+#login-box input {
+	border: 1px solid #B0D8FF;
+	padding: 4px;
+	width: 200px;
+}
+</style>
+<script src="http://lib.sinaapp.com/js/jquery/1.6.2/jquery.min.js"></script>
+<script src="client.js"></script>
+</head>
+<body>
+
+<div id="login-box">
+	<h2>登录</h2>
+	用户名：<br>
+	<input id="username" type="text" value="test" /><br>
+	密码：<br>
+	<input id="password" type="password" value="test" /><br>
+	(测试用户名和密码均为test)<br>
+	<button onclick="login()">登录</button>
+</div>
+
+</body>
+<script>
+taskcloud.init(function () {
+	if (taskcloud.isLogin)
+		window.location = '/';
+});
+
+/** 登录 */
+var login = function () {
+	var username = $('#username').val();
+	var password = $('#password').val();
+	taskcloud.login(username, password, function () {
+		if (taskcloud.isLogin)
+			window.location = '/';
+		else
+			alert('登录失败！');
+	});
+}
+</script>
+</html>

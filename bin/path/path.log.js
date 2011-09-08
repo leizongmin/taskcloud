@@ -27,7 +27,7 @@ module.exports = function (web, logger, logcache, getUserName) {
 			var user = req.path.user;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -44,7 +44,7 @@ module.exports = function (web, logger, logcache, getUserName) {
 			var id = req.path.id;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}

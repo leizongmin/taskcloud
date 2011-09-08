@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>登录</title>
+<title>任务进程</title>
 <meta charset="utf-8" />
+<link rel="stylesheet" href="/index.css" />
 <script src="http://lib.sinaapp.com/js/jquery/1.6.2/jquery.min.js"></script>
-<script src="/client.js"></script>
-<style>
-#login-box {
-	box-shadow: 2px 2px 10px #B0D8FF;
-	width: 220px;
-	padding: 24px;
-	margin: auto;
-}
-#login-box input {
-	border: 1px solid #B0D8FF;
-	padding: 4px;
-	width: 200px;
-}
-</style>
+<script>
+USERNAME = '{{username}}';		// 登录用户名
+</script>
+<script src="/index.query.js" /></script>
+<script src="/index.ui.js" /></script>
 </head>
 <body>
+<!-- 导航条 -->
+<div class="toolbar">
+	<div class="toolbar-inner">
+		<div class="toolbar-item" onclick="ui.addTask()">新建任务</div>
+		<!--<div class="toolbar-item">运行日志</div>
+		<div class="toolbar-item">新建模板</div>-->
+		<div class="toolbar-item" onclick="window.location='/home/templates';">模板管理</div>
+		<div class="toolbar-item" onclick="window.open('https://github.com/leizongmin/taskcloud', '_blank');">项目地址</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
 
-<div id="login-box">
-	<h2>登录</h2>
-	用户名：<br>
-	<input id="username" type="text" /><br>
-	密码：<br>
-	<input id="password" type="password" /><br>
-	(测试用户名和密码均为test)<br>
-	<button onclick="login()">登录</button>
+<!-- 运行命令 -->
+<div class="pannel command">
+	<textarea id="cmdcode" style="width:300px; height:200px;"></textarea>
+	<button onclick="query.exec()">运行</button>
+	<button onclick="$('.command').fadeOut()">取消</button>
+</div>
+
+<div class="main">
+	<!-- 任务进程 -->
+	<div class="pannel process">
+		<button onclick="query.getAllProcess()">刷新</button>
+		<div class="task-process">
+			<table width="100%">
+				<tr class="process-header">
+					<td width="60">ID</td>
+					<td width="120">模板</td>
+					<td width="100">周期(ms)</td>
+					<td width="60">状态</td>
+					<td width="150">开始时间</td>
+					<td width="150">结束时间</td>
+					<td width="150">最后运行时间</td>
+					<td>操作</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<!-- 日志 -->
+<div class="pannel logs">
+	<button onclick="query.logs(ui.watch_logs_id)">刷新</button>
+	<button onclick="ui.unwatchlogs()">关闭</button>
+	<div class="logs-box"></div>
 </div>
 
 </body>
-<script>
-taskcloud.init(function () {
-	if (taskcloud.isLogin)
-		alert(taskcloud.username + ', 你好！')
-	else
-		alert('你还没登录!');
-});
-
-/** 登录 */
-var login = function () {
-	var username = $('#username').val();
-	var password = $('#password').val();
-	taskcloud.login(username, password, function () {
-		if (taskcloud.isLogin)
-			alert('登录成功！');
-		else
-			alert('登录失败！');
-	});
-}
-</script>
 </html>

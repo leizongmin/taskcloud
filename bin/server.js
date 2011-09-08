@@ -54,11 +54,13 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 	
 	//--------------------------初始化Web.js--------------------------------------------
 	var urlRouter = {
-		'(.*)':		'bin/web/$1',			// 设置网站基本目录为 bin/web
-		'/':		'bin/web/index.html'	// 默认首页
+		'(.*)':		'bin/web/$1'			// 设置网站基本目录为 bin/web
+		//'/':		'bin/web/index.html'	// 默认首页
 	}
 	web.run(urlRouter, server_port);
 	//web.set404('./web/404.html');
+	web.set('tmplDir', 'bin/web');
+	web.set('tmlpExtname', 'html');
 	
 	//--------------------------初始化管理插件---------------------------------------------
 	require('./path/path.user')(web, logger, taskvm, usermanager.getUserName);

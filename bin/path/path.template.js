@@ -30,7 +30,7 @@ module.exports = function (web, logger, template_path, getUserName) {
 			var user = req.path.user;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -47,7 +47,7 @@ module.exports = function (web, logger, template_path, getUserName) {
 			var template = req.path.template;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.qs.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
@@ -67,7 +67,7 @@ module.exports = function (web, logger, template_path, getUserName) {
 			var code = req.data.code;
 			var ret = {}
 			// 验证权限
-			var access_token = req.qs.access_token;
+			var access_token = req.data.access_token || req.cookie.access_token;
 			if (user != getUserName(access_token)) {
 				ret.status = -1;
 			}
