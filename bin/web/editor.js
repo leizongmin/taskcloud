@@ -83,6 +83,6 @@ ui.newTemplate = function () {
 	query.edit_template_name = t;
 	$('#template_name').html(t);
 	
-	var hello = '/** 模板 ' + t + ' */\r\ndebug(\'Hello, world!\');\r\n';
+	var hello = '/** 模板 ' + t + ' */\r\ndebug(\'Hello, world!\');\r\n\r\n// 任务结束\r\ntask.end();\r\n';
 	editor.getSession().setValue(hello);
 }
