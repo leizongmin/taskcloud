@@ -1,5 +1,6 @@
 query = {}
 render = {}
+ui = {}
 
 $(document).ready(function () {
 	/* 创建编辑器 */
@@ -68,5 +69,20 @@ query.saveTemplate = function () {
 		else {
 			alert('保存成功！');
 		}
+		query.templatelist();
 	});
+}
+
+/** 新建模板 */
+ui.newTemplate = function () {
+	var t = prompt('请输入新建的模板名称：');
+	if (t == null || t == '') {
+		alert('已取消。');
+		return;
+	}
+	query.edit_template_name = t;
+	$('#template_name').html(t);
+	
+	var hello = '/** 模板 ' + t + ' */\r\ndebug(\'Hello, world!\');\r\n';
+	editor.getSession().setValue(hello);
 }

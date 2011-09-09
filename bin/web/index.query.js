@@ -20,11 +20,14 @@ query.exec = function () {
 	$('.command').fadeOut();
 	var code = $('#cmdcode').val();
 	$.post('/' + USERNAME + '/exec', {code: code}, function (d) {
-		if (d.status > 0)
+		if (d.status > 0) {
 			query.getAllProcess();
-		else
+			alert('成功！');
+		}
+		else {
 			$('.command').fadeIn();
-		alert(d.status > 0 ? '成功！' : '失败！');
+			alert('运行任务失败：' + d.data.info);
+		}
 	}, 'json');
 }
 

@@ -24,7 +24,9 @@ USERNAME = '{{username}}';
 	<!-- 编辑器 -->
 	<div class="pannel editor">
 		当前编辑的模板：<span id="template_name"></span>
-		<button onclick="query.saveTemplate()">保存</button>
+		<button onclick="query.saveTemplate()">保存</button> |
+		<button onclick="ui.newTemplate()">新建</button> |
+		<a href="/home/index" target="_blank">返回首页</a>
 		<pre id="editor"></pre>
 		<div style="clear:both;"></div>
 	</div>
