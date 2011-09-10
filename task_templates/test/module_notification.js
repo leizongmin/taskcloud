@@ -26,8 +26,8 @@ notification.sendmail = function (to, title, text, callback) {
         if (err)
             callback(err);
         else {
-            var ret = JSON.parse(data);
-            callback(ret.error);
+           // var ret = JSON.parse(data);
+           // callback(ret.error);
         }
     });
 }
