@@ -31,3 +31,15 @@ notification.sendmail = function (to, title, text, callback) {
         }
     });
 }
+
+/**
+ * 发微博
+ * 
+ * @param {string} text
+ */
+notification.sendweibo = function (text) {
+    rest.get('http://taskcloud.sinaapp.com/open/sina_weibo/send.php?access_token=65c1d29c0a42aa65af0c856695ef2976&task_id=28&config=oauth/sina_weibo', {text:text}, function (err, data) {
+        if (err)
+            debug('发表微博失败!');
+    });
+}

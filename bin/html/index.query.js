@@ -3,7 +3,7 @@ if (typeof query == 'undefined')
 	
 /** 获取任务列表 */
 query.getAllProcess = function () {
-	$.getJSON('/' + USERNAME + '/tasklist', function (d) {
+	$.getJSON('/task/' + USERNAME, function (d) {
 		if (d.status > 0) {
 			var html = render.processArray(d.data.auto) + render.processArray(d.data.wait) + render.processArray(d.data.sleep);
 		}
@@ -19,7 +19,7 @@ query.getAllProcess = function () {
 query.exec = function () {
 	$('.command').fadeOut();
 	var code = $('#cmdcode').val();
-	$.post('/' + USERNAME + '/exec', {code: code}, function (d) {
+	$.post('/task/' + USERNAME + '/exec', {code: code}, function (d) {
 		if (d.status > 0) {
 			query.getAllProcess();
 			alert('成功！');
@@ -33,7 +33,7 @@ query.exec = function () {
 
 /** 结束任务 */
 query.kill = function (id) {
-	$.get('/' + USERNAME + '/kill', {id: id}, function (d) {
+	$.get('/task/' + USERNAME + '/kill', {id: id}, function (d) {
 		if (d.status < 1)
 			alert('无法结束任务' + id);
 		else
@@ -43,7 +43,7 @@ query.kill = function (id) {
 
 /** 运行一次任务 */
 query.once = function (id) {
-	$.get('/' + USERNAME + '/once', {id: id}, function (d) {
+	$.get('/task/' + USERNAME + '/once', {id: id}, function (d) {
 		if (d.status < 1)
 			alert('无法运行任务' + id);
 		else
@@ -53,11 +53,11 @@ query.once = function (id) {
 
 /** 查看日志 */
 query.logs = function (id) {
-	$.get('/' + USERNAME + '/log/' + id, function (d) {
+	$.get('/log/' + USERNAME + '/' + id, function (d) { console.log(d);
 		if (d.status < 1)
 			alert('无法获取任务' + id + '的运行日志!');
 		else {
-			var html = render.logs(d.data);
+			var html = render.logs(d.data.reverse());
 			$('.logs-box').html(html);
 		}
 	});

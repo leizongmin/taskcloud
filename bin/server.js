@@ -5,10 +5,9 @@
  * @version 0.1
  */
  
-var web = require('Web.js');
+var web = require('QuickWeb');
 var taskvm = require('../lib/taskvm');
 var logcache = require('../lib/logcache');
-var usermanager = require('./user/usermanager');
 
 var server = module.exports;
 
@@ -52,22 +51,14 @@ server.run = function (template_dir, server_token, queue_cycle, server_port, tim
 	}
 	taskvm.logger = logger;
 	
-	//--------------------------初始化Web.js--------------------------------------------
-	var urlRouter = {
-		'(.*)':		'bin/web/$1'			// 设置网站基本目录为 bin/web
-		//'/':		'bin/web/index.html'	// 默认首页
-	}
-	web.run(urlRouter, server_port);
-	//web.set404('./web/404.html');
-	web.set('tmplDir', 'bin/web');
-	web.set('tmlpExtname', 'html');
+	//--------------------------初始化QuickWeb--------------------------------------------
+	web.set('wwwroot', __dirname + '/html');			// 网站根目录
+	web.set('code_path', __dirname + '/code');			// 代码目录
+	web.set('template_path', __dirname + '/html');		// 模板目录
 	
-	//--------------------------初始化管理插件---------------------------------------------
-	require('./path/path.user')(web, logger, taskvm, usermanager.getUserName);
-	require('./path/path.template')(web, logger, template_dir, usermanager.getUserName);
-	require('./path/path.log')(web, logger, logcache, usermanager.getUserName);
-	require('./path/path.home')(web, logger, usermanager, usermanager);
-
+	web.loadPlus();
+	web.create(server_port);
+	
 
 	//--------------------------初始化taskvm--------------------------------------------
 	taskvm.init(template_dir, queue_cycle);

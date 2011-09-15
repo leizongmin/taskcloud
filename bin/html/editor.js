@@ -22,7 +22,7 @@ $(document).ready(function () {
 
 /** 取模板列表 */
 query.templatelist = function () {
-	$.getJSON('/' + USERNAME + '/templatelist', function (d) {
+	$.getJSON('/template/' + USERNAME, function (d) {
 		if (d.status < 1)
 			alert('无法获取模板列表！');
 		else {
@@ -48,7 +48,7 @@ render.templatelist = function (d) {
 
 /** 读取模板文件 */
 query.getTemplate = function (t) {
-	$.getJSON('/' + USERNAME + '/template/' + t, function (d) {
+	$.getJSON('/template/' + USERNAME + '/' + t, function (d) {
 		if (d.status < 1)
 			alert('无法获取模板' + t);
 		else {
@@ -63,7 +63,7 @@ query.getTemplate = function (t) {
 query.saveTemplate = function () {
 	var t = query.edit_template_name;
 	var code = editor.getSession().getValue();
-	$.post('/' + USERNAME + '/template/' + t, {code: code}, function (d) {
+	$.post('/template/' + USERNAME + '/' + t, {code: code}, function (d) {
 		if (d.status < 1)
 			alert('保存模板' + t + '失败！');
 		else {
