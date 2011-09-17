@@ -1,0 +1,17 @@
+{
+   "name":			"taskcloud",
+   "main":			"./start.js",
+   "version":		"0.1.0",
+   "description":	"A nodejs multi-user task framework, like the cron tool.",
+   "author": "leizongmin <leizongmin@gmail.com> (http://lab.ucdok.com)",
+   "repository": {
+		"type": "git",
+		"url": "git://github.com/leizongmin/taskcloud.git"
+	},
+	"engines": {
+		"node": ">= 0.4.7"
+	},
+	"dependencies":	{
+		"QuickWeb":		"*"
+	}
+}
