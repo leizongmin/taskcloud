@@ -93,6 +93,7 @@ server.run = function (server_port, template_dir, queue_cycle, snapshot_cycle, s
 	console.log('+               Server start!                                      +');
 	console.log('+                                                                  +');
 	console.log('+------------------------------------------------------------------+');
+	console.log('                version ' + taskvm.version + '\n\n');
 }
 
 
