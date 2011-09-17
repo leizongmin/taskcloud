@@ -1,6 +1,3 @@
-debug('Hello, world!');
-
-for (i in args)
-	debug('启动参数 ' + i + '=' + args[i]);
+debug('任务已运行！');
 
 task.end();

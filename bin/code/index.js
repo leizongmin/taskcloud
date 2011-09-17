@@ -23,8 +23,11 @@ exports.get = function (server, request, response) {
 		g.auth.getUserName(request.cookie.access_token, function (username) {
 			if (!username)
 				response.sendFile('login.html');
-			else
+			else {
+				// 自动登录
+				server.session.username = username;
 				response.redirect('/home/index');
+			}
 		});
 		return;
 	}

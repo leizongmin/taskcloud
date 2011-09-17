@@ -18,14 +18,17 @@ exports.get = function (server, request, response) {
 	var template = request.path.template;
 	
 	var ret = {}
-	if (username != request.path.username)
-		ret.status = -1
-	else {
-		ret.data = g.tpl_get(username, template);
-		ret.status = typeof ret.data == 'string' ? 1 : 0;
+	if (username != request.path.username) {
+		ret.status = -1;
+		response.sendJSON(ret);
 	}
-	
-	response.sendJSON(ret);
+	else {
+		ret.data = g.usertpl.get(username, template, function (data) {
+			ret.data = data;
+			ret.status = typeof ret.data == 'string' ? 1 : 0;
+			response.sendJSON(ret);
+		});
+	}
 }
 
 /** 修改模板内容 */
@@ -38,12 +41,15 @@ exports.post = function (server, request, response) {
 	var code = request.post.code;
 	
 	var ret = {}
-	if (username != request.path.username)
-		ret.status = -1
-	else {
-		ret.data = g.tpl_set(username, template, code);
-		ret.status = ret.data ? 1 : 0;
+	if (username != request.path.username) {
+		ret.status = -1;
+		response.sendJSON(ret);
 	}
-	
-	response.sendJSON(ret);
+	else {
+		ret.data = g.usertpl.set(username, template, code, function (data) {
+			ret.data = data;
+			ret.status = ret.data ? 1 : 0;
+			response.sendJSON(ret);
+		});
+	}
 }

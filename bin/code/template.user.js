@@ -15,12 +15,15 @@ exports.get = function (server, request, response) {
 	var username = server.session.username;
 	
 	var ret = {}
-	if (username != request.path.username)
+	if (username != request.path.username) {
 		ret.status = -1;
-	else {
-		ret.data = g.tpl_list(username);
-		ret.status = ret.data ? 1 : 0;
+		response.sendJSON(ret);
 	}
-	
-	response.sendJSON(ret);
+	else {
+		g.usertpl.getList(username, function (data) {
+			ret.data = data;
+			ret.status = ret.data ? 1 : 0;
+			response.sendJSON(ret);
+		});
+	}
 }

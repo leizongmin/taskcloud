@@ -20,9 +20,8 @@ exports.get = function (server, request, response) {
 		var ret = {}
 		if (access_token) {
 			server.session.username = username;
-			server.session.password = password;
 			// 设置cookie.access_token，以便于下次自动登录
-			response.setCookie('access_token', ret.data, {
+			response.setCookie('access_token', access_token, {
 				path: '/',
 				maxAge: 3600 * 7
 			});
