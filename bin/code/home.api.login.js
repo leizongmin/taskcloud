@@ -26,6 +26,7 @@ exports.get = function (server, request, response) {
 				maxAge: 3600 * 7
 			});
 		}
+		ret.data = access_token;
 		ret.status = access_token ? 1 : 0;
 		response.sendJSON(ret);
 	});
