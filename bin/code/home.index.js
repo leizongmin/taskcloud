@@ -10,13 +10,15 @@ var g = require('./global.inc');
 exports.paths = '/home/index';
 
 exports.get = function (server, request, response) {
-	var access_token = request.cookie.access_token || request.get.access_token;
-	var username = g.user_get(access_token);
+	server.sessionStart();
 	
-	if (username) {
-		var data = { username: username }
-		response.renderFile('index.html', data, 'text/html');
-	}
-	else
+	// 如果没有登录，则转到首页登录界面
+	if (!server.session.username) {
 		response.redirect('/');
+		return;
+	}
+	
+	// 渲染页面
+	var data = { username: server.session.username }
+	response.renderFile('index.html', data, 'text/html');
 }

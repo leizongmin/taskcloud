@@ -10,12 +10,13 @@ var g = require('./global.inc');
 exports.paths = '/log/:username/:id';
 
 exports.get = function (server, request, response) {
-	var access_token = request.cookie.access_token || request.get.access_token;
-	var username = request.path.username;
+	server.sessionStart();
+	// 获取当前用户名
+	var username = server.session.username;
 	var id = request.path.id;
 	
 	var ret = {}
-	if (username != g.user_get(access_token))
+	if (username != request.path.username)
 		ret.status = -1;
 	else {
 		ret.data = g.logcache.get(username, id);

@@ -5,7 +5,7 @@
  * @version 0.1
  */
 
-var usermanager = require('./user/usermanager');
+var config = require('./config.inc');
 
 var g = module.exports = {}
 
@@ -14,28 +14,8 @@ g.taskvm = require('../../lib/taskvm');
 g.logcache = require('../../lib/logcache');
 
 
-/********************************************** 用户管理 ************************************************/
-/**
- * 用户登录
- *
- * @param {string} username
- * @param {string} password
- * @return {string}
- */
-g.user_login = function (username, password) {
-	return usermanager.login(username, password);
-}
-
-
-/**
- * 根据access_token获取用户名
- *
- * @param {string} access_token
- * @return {string}
- */
-g.user_get = function (access_token) {
-	return usermanager.getUserName(access_token);
-}
+/********************************************** 登录验证 ************************************************/
+g.auth = require('./lib/auth');
 
 
 /************************************************** 模板管理 **************************************/

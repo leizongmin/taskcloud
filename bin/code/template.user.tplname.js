@@ -11,12 +11,14 @@ exports.paths = '/template/:username/:template';
 
 /** 获取模板内容 */
 exports.get = function (server, request, response) {
-	var access_token = request.cookie.access_token || request.get.access_token;
-	var username = request.path.username;
+	server.sessionStart();
+	// 获取当前用户名
+	var username = server.session.username;
+	
 	var template = request.path.template;
 	
 	var ret = {}
-	if (username != g.user_get(access_token))
+	if (username != request.path.username)
 		ret.status = -1
 	else {
 		ret.data = g.tpl_get(username, template);
@@ -28,13 +30,15 @@ exports.get = function (server, request, response) {
 
 /** 修改模板内容 */
 exports.post = function (server, request, response) {
-	var access_token = request.cookie.access_token || request.get.access_token;
-	var username = request.path.username;
+	server.sessionStart();
+	// 获取当前用户名
+	var username = server.session.username;
+	
 	var template = request.path.template;
 	var code = request.post.code;
 	
 	var ret = {}
-	if (username != g.user_get(access_token))
+	if (username != request.path.username)
 		ret.status = -1
 	else {
 		ret.data = g.tpl_set(username, template, code);
