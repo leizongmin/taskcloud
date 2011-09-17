@@ -7,6 +7,9 @@ query.getAllProcess = function () {
 		if (d.status > 0) {
 			var html = render.processArray(d.data.auto) + render.processArray(d.data.wait) + render.processArray(d.data.sleep);
 		}
+		else if (d.status == -1) {
+			alert('请先登录！');
+		}
 		else {
 			var html = '<tr class="process-item"><td colspan="8">没有任务进程</td></tr>';
 		}
@@ -24,6 +27,9 @@ query.exec = function () {
 			query.getAllProcess();
 			alert('成功！');
 		}
+		else if (d.status == -1) {
+			alert('请先登录！');
+		}
 		else {
 			$('.command').fadeIn();
 			alert('运行任务失败：' + d.data.info);
@@ -34,7 +40,9 @@ query.exec = function () {
 /** 结束任务 */
 query.kill = function (id) {
 	$.get('/task/' + USERNAME + '/kill', {id: id}, function (d) {
-		if (d.status < 1)
+		if (d.status == -1)
+			alert('请先登录！');
+		else if (d.status < 1)
 			alert('无法结束任务' + id);
 		else
 			query.getAllProcess();
@@ -44,7 +52,9 @@ query.kill = function (id) {
 /** 运行一次任务 */
 query.once = function (id) {
 	$.get('/task/' + USERNAME + '/once', {id: id}, function (d) {
-		if (d.status < 1)
+		if (d.status == -1)
+			alert('请先登录！');
+		else if (d.status < 1)
 			alert('无法运行任务' + id);
 		else
 			query.getAllProcess();
@@ -54,7 +64,9 @@ query.once = function (id) {
 /** 查看日志 */
 query.logs = function (id) {
 	$.get('/log/' + USERNAME + '/' + id, function (d) { console.log(d);
-		if (d.status < 1)
+		if (d.status == -1)
+			alert('请先登录！');
+		else if (d.status < 1)
 			alert('无法获取任务' + id + '的运行日志!');
 		else {
 			var html = render.logs(d.data.reverse());
