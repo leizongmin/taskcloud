@@ -65,11 +65,15 @@ server.run = function (server_port, template_dir, queue_cycle, snapshot_cycle, s
 	taskvm.logger = logger;
 	
 	//--------------------------初始化QuickWeb--------------------------------------------
-	web.set('wwwroot', __dirname + '/html');			// 网站根目录
+	web.set('home_path', __dirname + '/html');			// 网站根目录
 	web.set('code_path', __dirname + '/code');			// 代码目录
 	web.set('template_path', __dirname + '/html');		// 模板目录
+	// 定义模板渲染函数
+	var mustache = require('mustache');
+	web.set('render_to_html', function (str, view) {
+		return mustache.to_html(str, view);
+	});
 	
-	web.loadPlus();
 	web.create(server_port);
 	
 
